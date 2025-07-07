@@ -1,0 +1,85 @@
+{
+  "name": "standard-parse",
+  "version": "0.1.0",
+  "description": "Schema parsing via the Standard Schema spec. Works with Zod, Valibot, Arktype, and more.",
+  "homepage": "https://github.com/catena-labs/standard-parse#readme",
+  "bugs": "https://github.com/catena-labs/standard-parse/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catena-labs/standard-parse.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Catena Labs",
+    "url": "https://catenalabs.com"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "check": "bun run format:check && bun run lint && bun run typecheck && bun test",
+    "clean": "git clean -fdX dist node_modules/.cache",
+    "fix": "bun run format && bun run lint:fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "nuke": "bun run clean && git clean -xdf node_modules",
+    "outdated": "npx npm-check-updates --interactive --format group",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/bun": "latest",
+    "arktype": "^2.0.0",
+    "eslint": "^9.27.0",
+    "eslint-config-flat-gitignore": "^2.1.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.5.3",
+    "prettier-plugin-packagejson": "^2.5.14",
+    "tsdown": "^0.12.9",
+    "typescript": "^5",
+    "typescript-eslint": "^8.32.1",
+    "valibot": "^1.1.0",
+    "zod": "^3.25.0"
+  },
+  "peerDependencies": {
+    "arktype": "^2.0.0",
+    "valibot": "^1.0.0",
+    "zod": "^3.25.0"
+  },
+  "peerDependenciesMeta": {
+    "arktype": {
+      "optional": true
+    },
+    "valibot": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
