@@ -43,6 +43,7 @@
     "lint:fix": "eslint . --fix",
     "nuke": "bun run clean && git clean -xdf node_modules",
     "outdated": "npx npm-check-updates --interactive --format group",
+    "prepublishOnly": "bun run build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
