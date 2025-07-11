@@ -23,6 +23,22 @@ describe("valibot", () => {
 
   testSafeParse(schema, "Invalid length: Expected >=3 but received 1")
   testParse(schema)
+
+  it("throws if the result is a promise", () => {
+    const schema = v.objectAsync({
+      name: v.pipeAsync(
+        v.string(),
+        v.checkAsync(() => Promise.resolve(true))
+      )
+    })
+
+    expect(() => safeParse(schema, { name: "John" })).toThrow(
+      "Invalid type: Input is a Promise"
+    )
+    expect(() => parse(schema, { name: "John" })).toThrow(
+      "Invalid type: Input is a Promise"
+    )
+  })
 })
 
 describe("zod/v3", () => {
