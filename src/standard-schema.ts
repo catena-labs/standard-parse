@@ -1,10 +1,10 @@
 import { ValidationError } from "./validation-error"
 import type { Output, Result, Schema } from "./types"
 
-export function safeParse<T extends Schema>(
-  schema: T,
+export function safeParse<TSchema extends Schema>(
+  schema: TSchema,
   input: unknown
-): Result<T> {
+): Result<Output<TSchema>> {
   const result = schema["~standard"].validate(input)
   if (result instanceof Promise) {
     throw new TypeError("Invalid type: Input is a Promise")
@@ -12,7 +12,10 @@ export function safeParse<T extends Schema>(
   return result
 }
 
-export function parse<T extends Schema>(schema: T, input: unknown): Output<T> {
+export function parse<TSchema extends Schema>(
+  schema: TSchema,
+  input: unknown
+): Output<TSchema> {
   const result = safeParse(schema, input)
 
   // if the `issues` field exists, the validation failed
