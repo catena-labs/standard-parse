@@ -1,11 +1,11 @@
-import * as v from "valibot"
+import type { Schema } from "./types"
 import { type } from "arktype"
+import * as v from "valibot"
+import { describe, expect, it } from "vitest"
 import { z as zodV3 } from "zod/v3"
 import * as zodV4 from "zod/v4"
-import { describe, expect, it } from "vitest"
 import { parse, safeParse } from "./standard-schema"
 import { ValidationError } from "./validation-error"
-import type { Schema } from "./types"
 
 describe("arktype", () => {
   const schema = type({
