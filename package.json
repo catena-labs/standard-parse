@@ -1,6 +1,6 @@
 {
   "name": "standard-parse",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Schema parsing via the Standard Schema spec. Works with Zod, Valibot, Arktype, and more.",
   "homepage": "https://github.com/catena-labs/standard-parse#readme",
   "bugs": "https://github.com/catena-labs/standard-parse/issues",
