@@ -142,17 +142,53 @@ import type * as s from "standard-parse"
 
 These are re-exported from `@standard-schema/spec`.
 
+## Test Matchers
+
+This library also includes some test matchers to make testing schemas easier in test files.
+
+### Vitest
+
+Import the matchers in your setup file:
+
+```ts
+// vitest.setup.ts
+import "standard-parse/test-matchers/vitest"
+```
+
+Then use the `toMatchSchema` matcher in your tests:
+
+```ts
+import { expect, test } from "vitest"
+import * as z from "zod"
+
+const schema = z.object({ name: z.string() })
+
+test("valid input matches schema", () => {
+  expect({ name: "Alice" }).toMatchSchema(schema)
+})
+
+test("invalid input does not match schema", () => {
+  expect({ name: 123 }).not.toMatchSchema(schema)
+})
+
+test("with additional checks", () => {
+  expect({ name: "Alice" }).toMatchSchema(schema, (parsed) => {
+    expect(parsed.name).toBe("Alice")
+  })
+})
+```
+
 ## ValidationError
 
 `parse` will throw a `ValidationError` on failure:
 
 ```ts
-import { ValidationError } from "standard-parse"
+import * as s from "standard-parse"
 
 try {
   s.parse(schema, badInput)
 } catch (err) {
-  if (err instanceof ValidationError) {
+  if (err instanceof s.ValidationError) {
     console.error(err.issues)
   }
 }
