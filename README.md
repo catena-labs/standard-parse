@@ -31,10 +31,10 @@ Perfect for form libraries, API frameworks, configuration parsers, or any librar
 
 ## Features
 
-- Works with [Zod](https://github.com/colinhacks/zod), [Valibot](https://valibot.dev/), and [Arktype](https://arktype.io/)
-- Unified API: `parse`, `safeParse`
+- Works with [Zod](https://github.com/colinhacks/zod), [Valibot](https://valibot.dev/), [Arktype](https://arktype.io/), and more.
+- Unified API: `parse()`, `safeParse()`, `is()`
 - Lightweight abstraction layer
-- Compatible with any schema that implements Standard Schema V1
+- Compatible with any schema that implements [Standard Schema V1](https://standardschema.dev/).
 
 ## Installation
 
@@ -98,7 +98,7 @@ const value = s.parse(schema, { name: "Alice" })
 
 ## API
 
-### `parse(schema, input)`
+### `parse<TSchema>(schema: TSchema, input: unknown): Output<TSchema>`
 
 Validates and returns the parsed value, or throws ValidationError on failure.
 
@@ -106,7 +106,7 @@ Validates and returns the parsed value, or throws ValidationError on failure.
 const output = s.parse(schema, input)
 ```
 
-### `safeParse(schema, input)`
+### `safeParse<TSchema>(schema: TSchema, input: unknown): Result<Output<TSchema>>`
 
 Returns an object with either `value` or `issues`:
 
@@ -119,14 +119,24 @@ if (result.issues) {
 }
 ```
 
+### `is<TSchema>(schema: TSchema, input): input is Output<TSchema>`
+
+Validates that a input is the schema, with additional type guard.
+
+```ts
+if (s.is(schema, input)) {
+  // input matches schema
+}
+```
+
 ## Types
 
 ```ts
 import type * as s from "standard-parse"
-// s.Schema<TInput, TOutout>
-// s.Input<TSchema>
-// s.Output<TSchema>
-// s.Result<TSchema>
+// s.Schema<TInput, TOutput>
+// s.Input<TSchema> // The schema's typescript input values
+// s.Output<TSchema> // The schema's typescript output returned from `parse`
+// s.Result<s.Output<TSchema>> // Returned by `safeParse`
 // s.Issue
 ```
 

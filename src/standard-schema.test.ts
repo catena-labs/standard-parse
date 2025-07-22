@@ -1,11 +1,11 @@
-import type { Schema } from "./types"
 import { type } from "arktype"
 import * as v from "valibot"
 import { describe, expect, it } from "vitest"
 import { z as zodV3 } from "zod/v3"
 import * as zodV4 from "zod/v4"
-import { parse, safeParse } from "./standard-schema"
+import * as s from "./standard-schema"
 import { ValidationError } from "./validation-error"
+import type { Schema } from "./types"
 
 describe("arktype", () => {
   const schema = type({
@@ -14,6 +14,7 @@ describe("arktype", () => {
 
   testSafeParse(schema, "name must be at least length 3 (was 1)")
   testParse(schema)
+  testIs(schema)
 })
 
 describe("valibot", () => {
@@ -23,6 +24,7 @@ describe("valibot", () => {
 
   testSafeParse(schema, "Invalid length: Expected >=3 but received 1")
   testParse(schema)
+  testIs(schema)
 
   it("throws if the result is a promise", () => {
     const schema = v.objectAsync({
@@ -32,10 +34,10 @@ describe("valibot", () => {
       )
     })
 
-    expect(() => safeParse(schema, { name: "John" })).toThrow(
+    expect(() => s.safeParse(schema, { name: "John" })).toThrow(
       "Invalid type: Input is a Promise"
     )
-    expect(() => parse(schema, { name: "John" })).toThrow(
+    expect(() => s.parse(schema, { name: "John" })).toThrow(
       "Invalid type: Input is a Promise"
     )
   })
@@ -48,6 +50,7 @@ describe("zod/v3", () => {
 
   testSafeParse(schema, "String must contain at least 3 character(s)")
   testParse(schema)
+  testIs(schema)
 })
 
 describe("zod/v4", () => {
@@ -62,7 +65,7 @@ describe("zod/v4", () => {
 function testSafeParse(schema: Schema, errorMessage: string) {
   return describe("safeParse()", () => {
     it("returns the parsed value", () => {
-      const result = safeParse(schema, { name: "John" })
+      const result = s.safeParse(schema, { name: "John" })
       if (result.issues) {
         throw new Error("Validation failed")
       }
@@ -70,7 +73,7 @@ function testSafeParse(schema: Schema, errorMessage: string) {
     })
 
     it("returns the issues if the input is invalid", () => {
-      const result = safeParse(schema, { name: "J" })
+      const result = s.safeParse(schema, { name: "J" })
       expect(result.issues).toBeDefined()
       if (!result.issues) {
         throw new Error("Validation failed")
@@ -83,12 +86,24 @@ function testSafeParse(schema: Schema, errorMessage: string) {
 function testParse(schema: Schema) {
   return describe("parse()", () => {
     it("returns the parsed value", () => {
-      const result = parse(schema, { name: "John" })
+      const result = s.parse(schema, { name: "John" })
       expect(result).toEqual({ name: "John" })
     })
 
     it("throws a ValidationError if the input is invalid", () => {
-      expect(() => parse(schema, { name: "J" })).toThrow(ValidationError)
+      expect(() => s.parse(schema, { name: "J" })).toThrow(ValidationError)
+    })
+  })
+}
+
+function testIs(schema: Schema) {
+  return describe("is()", () => {
+    it("returns true if the input is valid", () => {
+      expect(s.is(schema, { name: "John" })).toBe(true)
+    })
+
+    it("returns false if the input is invalid", () => {
+      expect(s.is(schema, { name: "J" })).toBe(false)
     })
   })
 }

@@ -31,18 +31,16 @@ export default tseslint.config(
         {
           "newlines-between": "never",
           groups: [
-            "type",
             "builtin",
             "external",
             "internal",
-            "parent",
-            "sibling",
+            ["sibling", "parent"],
             "index",
-            "object"
+            "object",
+            "type"
           ],
           alphabetize: {
-            order: "asc",
-            caseInsensitive: true
+            order: "asc"
           }
         }
       ]
