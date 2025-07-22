@@ -34,16 +34,17 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "check": "bun run format:check && bun run lint && bun run typecheck && bun test",
+    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm test",
     "clean": "git clean -fdX dist node_modules/.cache",
-    "fix": "bun run format && bun run lint:fix",
+    "fix": "pnpm run format && pnpm run lint:fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "nuke": "bun run clean && git clean -xdf node_modules",
+    "nuke": "pnpm run clean && git clean -xdf node_modules",
     "outdated": "npx npm-check-updates --interactive --format group",
-    "prepublishOnly": "bun run build",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -51,17 +52,19 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
-    "@types/bun": "latest",
+    "@types/node": "^24",
     "arktype": "^2.0.0",
     "eslint": "^9.27.0",
     "eslint-config-flat-gitignore": "^2.1.0",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import-x": "^4.16.1",
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "^2.5.14",
     "tsdown": "^0.12.9",
     "typescript": "^5",
     "typescript-eslint": "^8.32.1",
     "valibot": "^1.1.0",
+    "vitest": "^3.2.4",
     "zod": "^3.25.0"
   },
   "peerDependencies": {
@@ -80,6 +83,7 @@
       "optional": true
     }
   },
+  "packageManager": "pnpm@10.13.1",
   "publishConfig": {
     "access": "public"
   }
