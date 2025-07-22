@@ -1,15 +1,19 @@
 // @ts-check
 
 import js from "@eslint/js"
-import prettier from "eslint-config-prettier/flat"
-import tseslint from "typescript-eslint"
 import gitignore from "eslint-config-flat-gitignore"
+import prettier from "eslint-config-prettier/flat"
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript"
+import { importX } from "eslint-plugin-import-x"
+import tseslint from "typescript-eslint"
 
 export default tseslint.config(
   gitignore(),
   js.configs.recommended,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
   {
     languageOptions: {
       parserOptions: {
@@ -17,8 +21,44 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname
       }
     },
+    settings: {
+      "import-x/resolver-next": [createTypeScriptImportResolver({})]
+    },
     rules: {
-      "@typescript-eslint/no-confusing-void-expression": "off"
+      "@typescript-eslint/no-confusing-void-expression": "off",
+      "import-x/order": [
+        "warn",
+        {
+          "newlines-between": "never",
+          groups: [
+            "type",
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object"
+          ],
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true
+          }
+        }
+      ]
+    }
+  },
+  {
+    files: ["**/*.config.{js,ts}"],
+    rules: {
+      "import-x/no-named-as-default-member": "off"
+    }
+  },
+  {
+    files: ["**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off"
     }
   },
   prettier

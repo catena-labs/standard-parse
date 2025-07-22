@@ -1,5 +1,5 @@
-import { ValidationError } from "./validation-error"
 import type { Output, Result, Schema } from "./types"
+import { ValidationError } from "./validation-error"
 
 export function safeParse<TSchema extends Schema>(
   schema: TSchema,
