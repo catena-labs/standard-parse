@@ -24,6 +24,16 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./test-matchers/vitest": {
+      "import": {
+        "types": "./dist/test-matchers/vitest.d.ts",
+        "default": "./dist/test-matchers/vitest.js"
+      },
+      "require": {
+        "types": "./dist/test-matchers/vitest.d.cts",
+        "default": "./dist/test-matchers/vitest.cjs"
+      }
     }
   },
   "main": "./dist/index.js",
@@ -35,7 +45,7 @@
   "scripts": {
     "build": "tsdown",
     "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm test",
-    "clean": "git clean -fdX dist node_modules/.cache",
+    "clean": "git clean -xdf dist node_modules/.cache",
     "fix": "pnpm run format && pnpm run lint:fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -44,6 +54,7 @@
     "nuke": "pnpm run clean && git clean -xdf node_modules",
     "outdated": "pnpx npm-check-updates --interactive --format group",
     "prepublishOnly": "pnpm run build",
+    "publint": "pnpx publint@latest",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
@@ -72,6 +83,7 @@
   "peerDependencies": {
     "arktype": "^2.0.0",
     "valibot": "^1.0.0",
+    "vitest": "^3.2.0",
     "zod": "^3.25.0"
   },
   "peerDependenciesMeta": {
@@ -79,6 +91,9 @@
       "optional": true
     },
     "valibot": {
+      "optional": true
+    },
+    "vitest": {
       "optional": true
     },
     "zod": {

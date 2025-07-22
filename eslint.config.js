@@ -26,6 +26,7 @@ export default tseslint.config(
     },
     rules: {
       "@typescript-eslint/no-confusing-void-expression": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "import-x/order": [
         "warn",
         {
@@ -53,7 +54,7 @@ export default tseslint.config(
     }
   },
   {
-    files: ["**/*.test.ts"],
+    files: ["**/*.test.ts", "src/test-matchers/**/*.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-non-null-assertion": "off"
