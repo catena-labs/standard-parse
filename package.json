@@ -51,6 +51,7 @@
     "@standard-schema/spec": "^1.0.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "@eslint/js": "^9.27.0",
     "@types/node": "^24",
     "arktype": "^2.0.0",
