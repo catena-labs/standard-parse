@@ -1,5 +1,5 @@
 import { ValidationError } from "./validation-error"
-import type { Output, Result, Schema } from "./types"
+import type { StandardSchemaV1 } from "./types"
 
 /**
  * Parse the input into the schema
@@ -7,10 +7,10 @@ import type { Output, Result, Schema } from "./types"
  * @param input - The input to parse
  * @returns The parsed output
  */
-export function safeParse<TSchema extends Schema>(
+export function safeParse<TSchema extends StandardSchemaV1>(
   schema: TSchema,
   input: unknown
-): Result<Output<TSchema>> {
+): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>> {
   const result = schema["~standard"].validate(input)
   if (result instanceof Promise) {
     throw new TypeError("Invalid type: Input is a Promise")
@@ -24,10 +24,10 @@ export function safeParse<TSchema extends Schema>(
  * @param input - The input to parse
  * @returns The parsed output
  */
-export function parse<TSchema extends Schema>(
+export function parse<TSchema extends StandardSchemaV1>(
   schema: TSchema,
   input: unknown
-): Output<TSchema> {
+): StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
 
   // if the `issues` field exists, the validation failed
@@ -44,10 +44,10 @@ export function parse<TSchema extends Schema>(
  * @param input - The input to check
  * @returns True if the input is a valid output of the schema, false otherwise
  */
-export function is<TSchema extends Schema>(
+export function is<TSchema extends StandardSchemaV1>(
   schema: TSchema,
   input: unknown
-): input is Output<TSchema> {
+): input is StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
   return result.issues === undefined
 }

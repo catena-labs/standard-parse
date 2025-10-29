@@ -1,6 +1,6 @@
 import { expect } from "vitest"
 import { safeParse } from "../standard-schema"
-import type { Issue, Schema } from "../types"
+import type { StandardSchemaV1 } from "../types"
 
 interface ExpectationResult {
   pass: boolean
@@ -11,7 +11,7 @@ interface ExpectationResult {
 
 interface StandardSchemaTestMatchers<R = unknown> {
   toMatchSchema<TOutput>(
-    schema: Schema<unknown, TOutput>,
+    schema: StandardSchemaV1<unknown, TOutput>,
     additionalChecks?: (parsed: TOutput) => void
   ): R
 }
@@ -23,7 +23,7 @@ declare module "vitest" {
 function toMatchSchema<TOutput>(
   this: unknown,
   received: unknown,
-  schema: Schema<unknown, TOutput>,
+  schema: StandardSchemaV1<unknown, TOutput>,
   additionalChecks?: (parsed: TOutput) => void
 ): ExpectationResult {
   const result = safeParse(schema, received)
@@ -48,7 +48,7 @@ function toMatchSchema<TOutput>(
   }
 }
 
-function formatIssues(issues: readonly Issue[]): string {
+function formatIssues(issues: readonly StandardSchemaV1.Issue[]): string {
   return issues
     .map((issue) => {
       const pathKeys = issue.path?.map((p) =>
