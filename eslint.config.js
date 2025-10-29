@@ -1,13 +1,12 @@
-// @ts-check
-
 import js from "@eslint/js"
+import { defineConfig } from "eslint/config"
 import gitignore from "eslint-config-flat-gitignore"
 import prettier from "eslint-config-prettier/flat"
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript"
 import { importX } from "eslint-plugin-import-x"
 import tseslint from "typescript-eslint"
 
-export default tseslint.config(
+export default defineConfig(
   gitignore(),
   js.configs.recommended,
   tseslint.configs.strictTypeChecked,

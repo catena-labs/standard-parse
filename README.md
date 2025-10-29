@@ -98,7 +98,7 @@ const value = s.parse(schema, { name: "Alice" })
 
 ## API
 
-### `parse<TSchema>(schema: TSchema, input: unknown): Output<TSchema>`
+### `parse<TSchema>(schema: TSchema, input: unknown): StandardSchemaV1.InferOutput<TSchema>`
 
 Validates and returns the parsed value, or throws ValidationError on failure.
 
@@ -106,7 +106,7 @@ Validates and returns the parsed value, or throws ValidationError on failure.
 const output = s.parse(schema, input)
 ```
 
-### `safeParse<TSchema>(schema: TSchema, input: unknown): Result<Output<TSchema>>`
+### `safeParse<TSchema>(schema: TSchema, input: unknown): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>`
 
 Returns an object with either `value` or `issues`:
 
@@ -119,7 +119,7 @@ if (result.issues) {
 }
 ```
 
-### `is<TSchema>(schema: TSchema, input): input is Output<TSchema>`
+### `is<TSchema>(schema: TSchema, input): input is StandardSchemaV1.InferOutput<TSchema>`
 
 Validates that a input is the schema, with additional type guard.
 
@@ -132,15 +132,15 @@ if (s.is(schema, input)) {
 ## Types
 
 ```ts
-import type * as s from "standard-parse"
-// s.Schema<TInput, TOutput>
-// s.Input<TSchema> // The schema's typescript input values
-// s.Output<TSchema> // The schema's typescript output returned from `parse`
-// s.Result<s.Output<TSchema>> // Returned by `safeParse`
-// s.Issue
+import type { StandardSchemaV1 } from "standard-parse"
+// StandardSchemaV1<TInput, TOutput>
+// StandardSchemaV1.InferInput<TSchema>
+// StandardSchemaV1.InferOutput<TSchema>
+// StandardSchemaV1.Result<TOutput>
+// StandardSchemaV1.Issue
 ```
 
-These are re-exported from `@standard-schema/spec`.
+Re-exported from `@standard-schema/spec`.
 
 ## Test Matchers
 
