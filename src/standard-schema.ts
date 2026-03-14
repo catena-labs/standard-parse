@@ -1,5 +1,5 @@
-import { ValidationError } from "./validation-error"
 import type { StandardSchemaV1 } from "./types"
+import { ValidationError } from "./validation-error"
 
 /**
  * Parse the input into the schema

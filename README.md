@@ -1,12 +1,18 @@
 # standard-parse
 
-Unified API for any schema that conforms to the [Standard Schema](https://standardschema.dev) specification — works with Zod, Valibot, Arktype, and more.
+Unified `parse` API for any schema that conforms to the
+[Standard Schema](https://standardschema.dev) specification — works with Zod,
+Valibot, Arktype, and more.
 
-**standard-parse** provides a simple, consistent interface (`parse`, `safeParse`) for validating and parsing input using any schema that implements the [Standard Schema V1](https://standardschema.dev) interface.
+**standard-parse** provides a simple, consistent interface (`parse`,
+`safeParse`) for validating and parsing input using any schema that implements
+the [Standard Schema V1](https://standardschema.dev) interface.
 
 ## Why?
 
-Library authors often need to accept schemas from users without knowing which validation library they're using. Instead of supporting each library individually:
+Library authors often need to accept schemas from users without knowing which
+validation library they're using. Instead of supporting each library
+individually:
 
 ```ts
 // Before: supporting multiple libraries is painful
@@ -27,14 +33,17 @@ import * as s from "standard-parse"
 return s.parse(schema, input)
 ```
 
-Perfect for form libraries, API frameworks, configuration parsers, or any library that needs to work with user-provided schemas.
+Perfect for form libraries, API frameworks, configuration parsers, or any
+library that needs to work with user-provided schemas.
 
 ## Features
 
-- Works with [Zod](https://github.com/colinhacks/zod), [Valibot](https://valibot.dev/), [Arktype](https://arktype.io/), and more.
+- Works with [Zod](https://github.com/colinhacks/zod),
+  [Valibot](https://valibot.dev/), [Arktype](https://arktype.io/), and more.
 - Unified API: `parse()`, `safeParse()`, `is()`
 - Lightweight abstraction layer
-- Compatible with any schema that implements [Standard Schema V1](https://standardschema.dev/).
+- Compatible with any schema that implements
+  [Standard Schema V1](https://standardschema.dev/).
 
 ## Installation
 
@@ -144,7 +153,8 @@ Re-exported from `@standard-schema/spec`.
 
 ## Test Matchers
 
-This library also includes some test matchers to make testing schemas easier in test files.
+This library also includes some test matchers to make testing schemas easier in
+test files.
 
 ### Vitest
 
@@ -196,4 +206,5 @@ try {
 
 ## License (MIT)
 
-Copyright (c) 2025 [Catena Labs, Inc](https://catenalabs.com). See [`LICENSE`](./LICENSE).
+Copyright (c) 2025 [Catena Labs, Inc](https://catenalabs.com). See
+[`LICENSE`](./LICENSE).
