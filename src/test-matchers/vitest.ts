@@ -1,4 +1,5 @@
 import { expect } from "vitest"
+
 import { safeParse } from "../standard-schema"
 import type { StandardSchemaV1 } from "../types"
 
@@ -17,6 +18,7 @@ interface StandardSchemaTestMatchers<R = unknown> {
 }
 
 declare module "vitest" {
+  // oxlint-disable-next-line typescript/no-explicit-any -- must match vitest's built-in Matchers<T = any> signature
   interface Matchers<T = any> extends StandardSchemaTestMatchers<T> {}
 }
 
