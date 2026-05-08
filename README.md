@@ -158,12 +158,33 @@ test files.
 
 ### Vitest
 
-Import the matchers in your setup file:
+Create a setup file that imports the matchers:
 
 ```ts
 // vitest.setup.ts
 import "standard-parse/test-matchers/vitest"
 ```
+
+Register it in your Vitest config:
+
+```ts
+// vitest.config.ts
+import { defineConfig } from "vitest/config"
+
+export default defineConfig({
+  test: {
+    setupFiles: ["./vitest.setup.ts"]
+  }
+})
+```
+
+> **Note:** the import must live in a `.ts` file that TypeScript compiles
+> (covered by your `tsconfig.json`'s `include`). Passing the package path as a
+> string directly to `setupFiles` (e.g.
+> `setupFiles: ["standard-parse/test-matchers/vitest"]`) registers the matcher
+> at runtime but does not propagate the `toMatchSchema` type augmentation to
+> your tests. Alternatively, you can add the import to a single `*.ts` or
+> `*.d.ts` file anywhere in your project to make the types globally available.
 
 Then use the `toMatchSchema` matcher in your tests:
 
