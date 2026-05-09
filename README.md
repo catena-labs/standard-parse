@@ -105,52 +105,6 @@ const schema = type({ name: "string" })
 const value = s.parse(schema, { name: "Alice" })
 ```
 
-## API
-
-### `parse<TSchema>(schema: TSchema, input: unknown): StandardSchemaV1.InferOutput<TSchema>`
-
-Validates and returns the parsed value, or throws ValidationError on failure.
-
-```ts
-const output = s.parse(schema, input)
-```
-
-### `safeParse<TSchema>(schema: TSchema, input: unknown): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>`
-
-Returns an object with either `value` or `issues`:
-
-```ts
-const result = s.safeParse(schema, input)
-if (result.issues) {
-  // handle errors
-} else {
-  // result.value is typed
-}
-```
-
-### `is<TSchema>(schema: TSchema, input): input is StandardSchemaV1.InferOutput<TSchema>`
-
-Validates that a input is the schema, with additional type guard.
-
-```ts
-if (s.is(schema, input)) {
-  // input matches schema
-}
-```
-
-## Types
-
-```ts
-import type { StandardSchemaV1 } from "standard-parse"
-// StandardSchemaV1<TInput, TOutput>
-// StandardSchemaV1.InferInput<TSchema>
-// StandardSchemaV1.InferOutput<TSchema>
-// StandardSchemaV1.Result<TOutput>
-// StandardSchemaV1.Issue
-```
-
-Re-exported from `@standard-schema/spec`.
-
 ## Test Matchers
 
 This library also includes some test matchers to make testing schemas easier in
@@ -186,6 +140,17 @@ export default defineConfig({
 > your tests. Alternatively, you can add the import to a single `*.ts` or
 > `*.d.ts` file anywhere in your project to make the types globally available.
 
+> **TypeScript 6+:** ambient type augmentations from packages are no longer
+> picked up automatically. Add the matcher types to your `tsconfig.json`:
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "types": ["standard-parse/test-matchers/vitest"]
+>   }
+> }
+> ```
+
 Then use the `toMatchSchema` matcher in your tests:
 
 ```ts
@@ -208,6 +173,73 @@ test("with additional checks", () => {
   })
 })
 ```
+
+## API
+
+#### `parse(schema, input)`
+
+```ts
+parse<TSchema>(
+  schema: TSchema,
+  input: unknown
+): StandardSchemaV1.InferOutput<TSchema>
+```
+
+Validates and returns the parsed value, or throws `ValidationError` on failure.
+
+```ts
+const output = s.parse(schema, input)
+```
+
+#### `safeParse(schema, input)`
+
+```ts
+safeParse<TSchema>(
+  schema: TSchema,
+  input: unknown
+): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>
+```
+
+Returns an object with either `value` or `issues`:
+
+```ts
+const result = s.safeParse(schema, input)
+if (result.issues) {
+  // handle errors
+} else {
+  // result.value is typed
+}
+```
+
+#### `is(schema, input)`
+
+```ts
+is<TSchema>(
+  schema: TSchema,
+  input: unknown
+): input is StandardSchemaV1.InferOutput<TSchema>
+```
+
+Validates that an input matches the schema, narrowing its type.
+
+```ts
+if (s.is(schema, input)) {
+  // input matches schema
+}
+```
+
+## Types
+
+```ts
+import type { StandardSchemaV1 } from "standard-parse"
+// StandardSchemaV1<TInput, TOutput>
+// StandardSchemaV1.InferInput<TSchema>
+// StandardSchemaV1.InferOutput<TSchema>
+// StandardSchemaV1.Result<TOutput>
+// StandardSchemaV1.Issue
+```
+
+Re-exported from `@standard-schema/spec`.
 
 ## ValidationError
 
