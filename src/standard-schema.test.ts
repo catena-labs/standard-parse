@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 import { z as zodV4 } from "zod"
 import { z as zodV3 } from "zod-v3"
 
+import { formatIssues } from "./format-issues"
 import * as s from "./standard-schema"
 import { ValidationError } from "./validation-error"
 
@@ -104,5 +105,37 @@ describe("async schemas", () => {
     expect(() => s.parse(schema, { name: "John" })).toThrow(
       "Invalid type: Input is a Promise"
     )
+  })
+})
+
+describe("formatIssues()", () => {
+  it("formats issue messages with paths", () => {
+    expect(
+      formatIssues([
+        {
+          message: "Expected string",
+          path: [{ key: "user" }, { key: "name" }]
+        },
+        {
+          message: "Expected number",
+          path: [{ key: "user" }, { key: "age" }]
+        }
+      ])
+    ).toBe("- user.name: Expected string\n- user.age: Expected number")
+  })
+
+  it("formats empty issue arrays", () => {
+    expect(formatIssues([])).toBe("Invalid input")
+  })
+
+  it("keeps ValidationError messages backward compatible", () => {
+    const error = new ValidationError([
+      {
+        message: "Expected string",
+        path: [{ key: "name" }]
+      }
+    ])
+
+    expect(error.message).toBe("Invalid type: Expected string")
   })
 })

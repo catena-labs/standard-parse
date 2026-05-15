@@ -1,5 +1,6 @@
 import { expect } from "vitest"
 
+import { formatIssues } from "../format-issues"
 import { safeParse } from "../standard-schema"
 import type { StandardSchemaV1 } from "../types"
 
@@ -48,18 +49,6 @@ function toMatchSchema<TOutput>(
     pass: true,
     message: () => `Expected ${JSON.stringify(received)} not to match schema`
   }
-}
-
-function formatIssues(issues: readonly StandardSchemaV1.Issue[]): string {
-  return issues
-    .map((issue) => {
-      const pathKeys = issue.path?.map((p) =>
-        typeof p === "object" ? p.key : p
-      )
-      const path = pathKeys ? `${pathKeys.join(".")}:` : ""
-      return `  - ${path} ${issue.message}`
-    })
-    .join("\n")
 }
 
 expect.extend({
