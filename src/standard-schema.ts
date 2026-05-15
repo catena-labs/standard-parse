@@ -19,6 +19,19 @@ export function safeParse<TSchema extends StandardSchemaV1>(
 }
 
 /**
+ * Parse the input into the schema, awaiting asynchronous validators when needed
+ * @param schema - The schema to parse against
+ * @param input - The input to parse
+ * @returns The parsed output or validation issues
+ */
+export async function safeParseAsync<TSchema extends StandardSchemaV1>(
+  schema: TSchema,
+  input: unknown
+): Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>> {
+  return await schema["~standard"].validate(input)
+}
+
+/**
  * Parse the input into the schema
  * @param schema - The schema to parse against
  * @param input - The input to parse
@@ -29,6 +42,26 @@ export function parse<TSchema extends StandardSchemaV1>(
   input: unknown
 ): StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
+
+  // if the `issues` field exists, the validation failed
+  if (result.issues) {
+    throw new ValidationError(result.issues)
+  }
+
+  return result.value
+}
+
+/**
+ * Parse the input into the schema, awaiting asynchronous validators when needed
+ * @param schema - The schema to parse against
+ * @param input - The input to parse
+ * @returns The parsed output
+ */
+export async function parseAsync<TSchema extends StandardSchemaV1>(
+  schema: TSchema,
+  input: unknown
+): Promise<StandardSchemaV1.InferOutput<TSchema>> {
+  const result = await safeParseAsync(schema, input)
 
   // if the `issues` field exists, the validation failed
   if (result.issues) {

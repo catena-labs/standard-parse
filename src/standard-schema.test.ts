@@ -105,4 +105,69 @@ describe("async schemas", () => {
       "Invalid type: Input is a Promise"
     )
   })
+
+  it("safeParseAsync returns the parsed value", async () => {
+    const schema = v.objectAsync({
+      name: v.pipeAsync(
+        v.string(),
+        v.checkAsync(() => Promise.resolve(true))
+      )
+    })
+
+    const result = await s.safeParseAsync(schema, { name: "John" })
+    if (result.issues) {
+      throw new Error("Validation failed")
+    }
+
+    expect(result.value).toEqual({ name: "John" })
+  })
+
+  it("safeParseAsync returns issues if the input is invalid", async () => {
+    const schema = v.objectAsync({
+      name: v.pipeAsync(
+        v.string(),
+        v.checkAsync(
+          (input) => Promise.resolve(input.length >= 3),
+          "Name must be at least 3 characters"
+        )
+      )
+    })
+
+    const result = await s.safeParseAsync(schema, { name: "Jo" })
+    expect(result.issues).toBeDefined()
+    if (!result.issues) {
+      throw new Error("Validation succeeded")
+    }
+
+    expect(result.issues[0]?.message).toBe("Name must be at least 3 characters")
+  })
+
+  it("parseAsync returns the parsed value", async () => {
+    const schema = v.objectAsync({
+      name: v.pipeAsync(
+        v.string(),
+        v.checkAsync(() => Promise.resolve(true))
+      )
+    })
+
+    await expect(s.parseAsync(schema, { name: "John" })).resolves.toEqual({
+      name: "John"
+    })
+  })
+
+  it("parseAsync throws a ValidationError if the input is invalid", async () => {
+    const schema = v.objectAsync({
+      name: v.pipeAsync(
+        v.string(),
+        v.checkAsync(
+          (input) => Promise.resolve(input.length >= 3),
+          "Name must be at least 3 characters"
+        )
+      )
+    })
+
+    await expect(s.parseAsync(schema, { name: "Jo" })).rejects.toThrow(
+      ValidationError
+    )
+  })
 })

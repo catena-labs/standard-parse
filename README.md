@@ -5,8 +5,9 @@ Unified `parse` API for any schema that conforms to the
 Valibot, Arktype, and more.
 
 **standard-parse** provides a simple, consistent interface (`parse`,
-`safeParse`) for validating and parsing input using any schema that implements
-the [Standard Schema V1](https://standardschema.dev) interface.
+`safeParse`, `parseAsync`, `safeParseAsync`) for validating and parsing input
+using any schema that implements the
+[Standard Schema V1](https://standardschema.dev) interface.
 
 ## Why?
 
@@ -40,7 +41,8 @@ library that needs to work with user-provided schemas.
 
 - Works with [Zod](https://github.com/colinhacks/zod),
   [Valibot](https://valibot.dev/), [Arktype](https://arktype.io/), and more.
-- Unified API: `parse()`, `safeParse()`, `is()`
+- Unified API: `parse()`, `safeParse()`, `parseAsync()`, `safeParseAsync()`,
+  `is()`
 - Lightweight abstraction layer
 - Compatible with any schema that implements
   [Standard Schema V1](https://standardschema.dev/).
@@ -225,6 +227,42 @@ Validates that an input matches the schema, narrowing its type.
 ```ts
 if (s.is(schema, input)) {
   // input matches schema
+}
+```
+
+#### `parseAsync(schema, input)`
+
+```ts
+parseAsync<TSchema>(
+  schema: TSchema,
+  input: unknown
+): Promise<StandardSchemaV1.InferOutput<TSchema>>
+```
+
+Validates with sync or async schemas and returns the parsed value, or rejects
+with `ValidationError` on failure.
+
+```ts
+const output = await s.parseAsync(schema, input)
+```
+
+#### `safeParseAsync(schema, input)`
+
+```ts
+safeParseAsync<TSchema>(
+  schema: TSchema,
+  input: unknown
+): Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
+```
+
+Returns a promise for the same result shape as `safeParse()`.
+
+```ts
+const result = await s.safeParseAsync(schema, input)
+if (result.issues) {
+  // handle errors
+} else {
+  // result.value is typed
 }
 ```
 
