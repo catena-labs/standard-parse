@@ -30,8 +30,8 @@
     "oxfmt": "latest",
     "oxlint": "latest",
     "oxlint-tsgolint": "latest",
-    "tsdown": "^0.22.3",
-    "typescript": "^6"
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@11.8.0"
 }
