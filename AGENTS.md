@@ -2,30 +2,42 @@
 
 ## Project Overview
 
-`standard-parse` is a lightweight TypeScript library that provides a unified
-`parse`, `safeParse`, and `is` API for any schema conforming to the
-[Standard Schema](https://standardschema.dev) spec (Zod v3/v4, Valibot, Arktype,
-etc.). It is published as an npm package for library authors who need to accept
-user-provided schemas without coupling to a specific validation library.
+This is a pnpm-workspace monorepo with two published packages under `packages/`:
+
+- **`standard-parse`** - a lightweight TypeScript library providing a unified
+  `parse`, `safeParse`, and `is` API for any schema conforming to the
+  [Standard Schema](https://standardschema.dev) spec (Zod v3/v4, Valibot,
+  Arktype, etc.). For library authors who need to accept user-provided schemas
+  without coupling to a specific validation library.
+- **`standard-matchers`** - test matchers (currently the Vitest `toMatchSchema`)
+  for any Standard Schema. Depends on `standard-parse` via `workspace:*`.
 
 ## Commands
 
-| Task            | Command                                               |
-| --------------- | ----------------------------------------------------- |
-| Install         | `pnpm install`                                        |
-| Build           | `pnpm build` (uses tsdown)                            |
-| Test            | `pnpm test` (vitest, watch disabled by default)       |
-| Run single test | `pnpm vitest run src/standard-schema.test.ts`         |
-| Typecheck       | `pnpm typecheck`                                      |
-| Lint            | `pnpm lint` (oxlint with type-aware checking)         |
-| Lint fix        | `pnpm fix` (format + lint fix)                        |
-| Format          | `pnpm format` (oxfmt)                                 |
-| Full check      | `pnpm check` (format:check + lint + typecheck + test) |
-| Publish check   | `pnpm publint`                                        |
+Run from the repo root. Root scripts fan out across packages with `pnpm -r`;
+build runs in topological order (`standard-parse` before `standard-matchers`).
+
+| Task       | Command                                               |
+| ---------- | ----------------------------------------------------- |
+| Install    | `pnpm install`                                        |
+| Build      | `pnpm build` (tsdown, all packages)                   |
+| Test       | `pnpm test` (vitest, all packages)                    |
+| Typecheck  | `pnpm typecheck` (tsc --noEmit, all packages)         |
+| Lint       | `pnpm lint` (oxlint with type-aware checking)         |
+| Lint fix   | `pnpm fix` (format + lint fix)                        |
+| Format     | `pnpm format` (oxfmt)                                 |
+| Full check | `pnpm check` (format:check + lint + typecheck + test) |
+
+`standard-matchers` consumes `standard-parse` through its built `dist`, and
+oxlint's type-aware pass needs those types too, so the root `lint`, `typecheck`,
+`test`, and `check` scripts build first (`pnpm -r run build`) — they are
+self-contained and need no manual build, even after `pnpm clean`. To target one
+package, use `pnpm --filter standard-parse <script>` (build `standard-parse`
+first if it consumes `dist`).
 
 ## Architecture
 
-The entire library is small and lives in `src/`:
+### `packages/standard-parse/src/`
 
 - **`standard-schema.ts`** - Core functions: `safeParse()`, `parse()`, `is()`.
   All call `schema["~standard"].validate(input)` per the Standard Schema spec.
@@ -34,19 +46,21 @@ The entire library is small and lives in `src/`:
   failure. Carries the `issues` array from the Standard Schema result.
 - **`types.ts`** - Re-exports `StandardSchemaV1` from `@standard-schema/spec`.
 - **`index.ts`** - Barrel export.
-- **`test-matchers/vitest.ts`** - Custom vitest matcher `toMatchSchema()` that
-  extends `expect`. Exported as a separate entry point
-  (`standard-parse/test-matchers/vitest`).
 
-Two build entry points in tsdown: `src/index.ts` and
-`src/test-matchers/vitest.ts`. Outputs ESM with `.d.ts` declarations.
+Single tsdown entry point (`src/index.ts`), ESM with `.d.ts` declarations.
+
+### `packages/standard-matchers/src/`
+
+- **`vitest.ts`** - Custom Vitest matcher `toMatchSchema()` that extends
+  `expect`, built on `safeParse` from `standard-parse`. Published as the
+  `standard-matchers/vitest` subpath export.
 
 ## Testing
 
-Tests in `src/standard-schema.test.ts` use `describe.each` to run the same suite
-against all four schema libraries (Arktype, Valibot, Zod v3, Zod v4). The vitest
-setup file (`vitest.config.ts`) auto-registers the custom `toMatchSchema`
-matcher.
+`standard-parse` tests (`standard-schema.test.ts`) use `describe.each` to run
+the same suite against all four schema libraries (Arktype, Valibot, Zod v3, Zod
+v4). `standard-matchers` tests register `toMatchSchema` via its own vitest setup
+file (`vitest.config.ts`).
 
 ## Tooling
 

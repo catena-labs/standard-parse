@@ -76,16 +76,6 @@ describe.each(Object.entries(schemaLibraries))(
         expect(s.is(schema, { name: "J" })).toBe(false)
       })
     })
-
-    describe("schema matchers", () => {
-      it("returns true if the input is valid", () => {
-        expect({ name: "John" }).toMatchSchema(schema)
-      })
-
-      it("returns false if the input is invalid", () => {
-        expect({ name: "J" }).not.toMatchSchema(schema)
-      })
-    })
   }
 )
 

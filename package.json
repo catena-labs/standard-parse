@@ -1,90 +1,37 @@
 {
-  "name": "standard-parse",
-  "version": "0.5.0",
-  "description": "Schema parsing via the Standard Schema spec. Works with Zod, Valibot, Arktype, and more.",
-  "homepage": "https://github.com/catena-labs/standard-parse#readme",
-  "bugs": "https://github.com/catena-labs/standard-parse/issues",
+  "name": "@catena-labs/standard-parse-monorepo",
+  "version": "0.0.0",
+  "private": true,
   "license": "MIT",
-  "author": {
-    "name": "Catena Labs",
-    "url": "https://catenalabs.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/catena-labs/standard-parse.git"
-  },
-  "files": [
-    "dist"
-  ],
   "type": "module",
-  "main": "./dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.mts",
-      "default": "./dist/index.mjs"
-    },
-    "./test-matchers/vitest": {
-      "types": "./dist/test-matchers/vitest.d.mts",
-      "default": "./dist/test-matchers/vitest.mjs"
-    }
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "build": "tsdown",
-    "check": "pnpm run format:check && pnpm run lint && pnpm test",
-    "clean": "git clean -xdf dist node_modules/.cache",
+    "build": "pnpm -r run build",
+    "changeset": "changeset",
+    "check": "pnpm run build && pnpm run format:check && pnpm run lint:only && pnpm run typecheck:only && pnpm run test:only",
+    "clean": "git clean -xdf node_modules/.cache && pnpm -r exec git clean -xdf dist",
     "fix": "pnpm run format && pnpm run lint:fix",
     "format": "oxfmt",
     "format:check": "pnpm run format --check",
-    "lint": "oxlint --type-aware",
+    "lint": "pnpm run build && pnpm run lint:only",
     "lint:fix": "pnpm run lint --fix --fix-suggestions",
-    "lint:fixall": "pnpm run lint:fix --fix-dangerously",
+    "lint:only": "oxlint --type-aware",
     "nuke": "pnpm run clean && git clean -xdf node_modules",
-    "outdated": "pnpm dlx npm-check-updates --interactive --format group",
-    "prepublishOnly": "pnpm run build && pnpm run publint",
-    "publint": "pnpm dlx publint@latest",
-    "test": "vitest"
-  },
-  "dependencies": {
-    "@standard-schema/spec": "^1.1.0"
+    "outdated": "pnpm dlx npm-check-updates --interactive --format group --workspaces --root",
+    "release": "pnpm run build && changeset publish",
+    "test": "pnpm run build && pnpm run test:only",
+    "test:only": "pnpm -r run test",
+    "typecheck": "pnpm run build && pnpm run typecheck:only",
+    "typecheck:only": "pnpm -r run typecheck",
+    "version": "changeset version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
     "@types/node": "latest",
-    "arktype": "^2.2.0",
     "oxfmt": "latest",
     "oxlint": "latest",
     "oxlint-tsgolint": "latest",
     "tsdown": "^0.22.0",
-    "typescript": "^6",
-    "valibot": "^1.3.0",
-    "vitest": "^4.1.5",
-    "zod": "^4.0.0",
-    "zod-v3": "npm:zod@^3.25.76"
-  },
-  "peerDependencies": {
-    "arktype": "^2.0.0",
-    "valibot": "^1.0.0",
-    "vitest": ">=3.2.0",
-    "zod": ">= 3.25.0"
-  },
-  "peerDependenciesMeta": {
-    "arktype": {
-      "optional": true
-    },
-    "valibot": {
-      "optional": true
-    },
-    "vitest": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
-    }
+    "typescript": "^6"
   },
   "packageManager": "pnpm@10.33.4"
 }

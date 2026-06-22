@@ -1,7 +1,6 @@
+import { safeParse } from "standard-parse"
+import type { StandardSchemaV1 } from "standard-parse"
 import { expect } from "vitest"
-
-import { safeParse } from "../standard-schema"
-import type { StandardSchemaV1 } from "../types"
 
 interface ExpectationResult {
   pass: boolean
@@ -23,7 +22,7 @@ declare module "vitest" {
 }
 
 function toMatchSchema<TOutput>(
-  this: unknown,
+  this: { isNot?: boolean },
   received: unknown,
   schema: StandardSchemaV1<unknown, TOutput>,
   additionalChecks?: (parsed: TOutput) => void
@@ -40,7 +39,9 @@ function toMatchSchema<TOutput>(
     }
   }
 
-  if (additionalChecks) {
+  // Skip value assertions on the negated path (`.not`), where a match is
+  // already a failure and the checks would never be meaningfully evaluated.
+  if (additionalChecks && !this.isNot) {
     additionalChecks(result.value)
   }
 
