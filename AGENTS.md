@@ -10,7 +10,7 @@ This is a pnpm-workspace monorepo with two published packages under `packages/`:
   Arktype, etc.). For library authors who need to accept user-provided schemas
   without coupling to a specific validation library.
 - **`standard-matchers`** - test matchers (currently the Vitest `toMatchSchema`)
-  for any Standard Schema. Depends on `standard-parse` via `workspace:*`.
+  for any Standard Schema. Depends on `standard-parse` via `workspace:^`.
 
 ## Commands
 
