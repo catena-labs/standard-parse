@@ -76,6 +76,11 @@ test("with additional checks", () => {
 })
 ```
 
+> **Note:** `additionalChecks` only runs on the positive path. It is ignored
+> when the matcher is negated
+> (`expect(value).not.toMatchSchema(schema, checks)`), since a successful match
+> there is already a test failure.
+
 ## License (MIT)
 
 Copyright (c) 2025 [Catena Labs, Inc](https://catenalabs.com). See
