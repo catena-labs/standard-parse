@@ -1,6 +1,6 @@
 {
   "name": "standard-matchers",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Test matchers for any Standard Schema (Zod, Valibot, Arktype, and more). Vitest's toMatchSchema and friends.",
   "homepage": "https://github.com/catena-labs/standard-parse/tree/main/packages/standard-matchers#readme",
   "bugs": "https://github.com/catena-labs/standard-parse/issues",
