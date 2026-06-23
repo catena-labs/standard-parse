@@ -1,0 +1,52 @@
+{
+  "name": "standard-matchers",
+  "version": "0.0.0",
+  "description": "Test matchers for any Standard Schema (Zod, Valibot, Arktype, and more). Vitest's toMatchSchema and friends.",
+  "homepage": "https://github.com/catena-labs/standard-parse/tree/main/packages/standard-matchers#readme",
+  "bugs": "https://github.com/catena-labs/standard-parse/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Catena Labs",
+    "url": "https://catenalabs.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catena-labs/standard-parse.git",
+    "directory": "packages/standard-matchers"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    "./vitest": {
+      "types": "./dist/vitest.d.mts",
+      "default": "./dist/vitest.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build && pnpm run publint",
+    "publint": "pnpm dlx publint@latest",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "standard-parse": "workspace:^"
+  },
+  "devDependencies": {
+    "arktype": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "valibot": "catalog:",
+    "vitest": "catalog:",
+    "zod": "catalog:",
+    "zod-v3": "catalog:"
+  },
+  "peerDependencies": {
+    "vitest": ">=3.2.0"
+  }
+}

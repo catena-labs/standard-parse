@@ -1,0 +1,68 @@
+{
+  "name": "standard-parse",
+  "version": "0.5.0",
+  "description": "Schema parsing via the Standard Schema spec. Works with Zod, Valibot, Arktype, and more.",
+  "homepage": "https://github.com/catena-labs/standard-parse/tree/main/packages/standard-parse#readme",
+  "bugs": "https://github.com/catena-labs/standard-parse/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Catena Labs",
+    "url": "https://catenalabs.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catena-labs/standard-parse.git",
+    "directory": "packages/standard-parse"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build && pnpm run publint",
+    "publint": "pnpm dlx publint@latest",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.1.0"
+  },
+  "devDependencies": {
+    "arktype": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "valibot": "catalog:",
+    "vitest": "catalog:",
+    "zod": "catalog:",
+    "zod-v3": "catalog:"
+  },
+  "peerDependencies": {
+    "arktype": "^2.0.0",
+    "valibot": "^1.0.0",
+    "zod": ">= 3.25.0"
+  },
+  "peerDependenciesMeta": {
+    "arktype": {
+      "optional": true
+    },
+    "valibot": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
+  }
+}
