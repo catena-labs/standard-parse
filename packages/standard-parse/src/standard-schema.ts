@@ -1,6 +1,12 @@
 import type { StandardSchemaV1 } from "./types"
 import { ValidationError } from "./validation-error"
 
+function hasValidationIssues(
+  result: StandardSchemaV1.Result<unknown>
+): result is StandardSchemaV1.FailureResult {
+  return Array.isArray(result.issues)
+}
+
 /**
  * Parse the input into the schema
  * @param schema - The schema to parse against
@@ -30,8 +36,7 @@ export function parse<TSchema extends StandardSchemaV1>(
 ): StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
 
-  // if the `issues` field exists, the validation failed
-  if (result.issues) {
+  if (hasValidationIssues(result)) {
     throw new ValidationError(result.issues)
   }
 
@@ -49,5 +54,5 @@ export function is<TSchema extends StandardSchemaV1>(
   input: unknown
 ): input is StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
-  return result.issues === undefined
+  return !hasValidationIssues(result)
 }
