@@ -1,0 +1,32 @@
+{
+  "name": "standard-parse-studio",
+  "version": "1.0.0",
+  "description": "Interactive Universal Standard Schema Parser, Validator Playground & Benchmark Studio for Catena Labs.",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "standard-parse-cli": "./bin/parse-cli.js"
+  },
+  "scripts": {
+    "start": "node src/server/app.js",
+    "cli": "node bin/parse-cli.js",
+    "test": "node tests/run-all.js"
+  },
+  "keywords": [
+    "catena-labs",
+    "standard-parse",
+    "standard-schema",
+    "zod",
+    "valibot",
+    "arktype",
+    "schema-validation"
+  ],
+  "author": "Catena Labs Community",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.5",
+    "express": "^4.21.2"
+  }
+}
