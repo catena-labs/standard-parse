@@ -11,6 +11,14 @@ export function safeParse<TSchema extends StandardSchemaV1>(
   schema: TSchema,
   input: unknown
 ): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>> {
+  if (
+    !schema ||
+    typeof schema !== "object" ||
+    !("~standard" in schema) ||
+    typeof schema["~standard"]?.validate !== "function"
+  ) {
+    throw new TypeError("Invalid schema: Expected a Standard Schema v1 object")
+  }
   const result = schema["~standard"].validate(input)
   if (result instanceof Promise) {
     throw new TypeError("Invalid type: Input is a Promise")

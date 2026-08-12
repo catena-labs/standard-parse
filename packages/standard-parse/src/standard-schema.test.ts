@@ -96,3 +96,16 @@ describe("async schemas", () => {
     )
   })
 })
+
+describe("invalid schemas", () => {
+  it("throws TypeError if schema is null or invalid object", () => {
+    // @ts-expect-error testing invalid runtime schema input
+    expect(() => s.safeParse(null, "test")).toThrow(
+      "Invalid schema: Expected a Standard Schema v1 object"
+    )
+    // @ts-expect-error testing invalid runtime schema input
+    expect(() => s.safeParse({}, "test")).toThrow(
+      "Invalid schema: Expected a Standard Schema v1 object"
+    )
+  })
+})
