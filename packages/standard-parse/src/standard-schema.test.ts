@@ -80,7 +80,7 @@ describe.each(Object.entries(schemaLibraries))(
 )
 
 describe("async schemas", () => {
-  it("throws if the result is a promise", () => {
+  it("throws a TypeError identifying the schema, not the input", () => {
     const schema = v.objectAsync({
       name: v.pipeAsync(
         v.string(),
@@ -88,11 +88,12 @@ describe("async schemas", () => {
       )
     })
 
-    expect(() => s.safeParse(schema, { name: "John" })).toThrow(
-      "Invalid type: Input is a Promise"
-    )
-    expect(() => s.parse(schema, { name: "John" })).toThrow(
-      "Invalid type: Input is a Promise"
-    )
+    const expectedMessage =
+      "Async schemas are not supported: the schema's validate() returned a Promise"
+
+    expect(() => s.safeParse(schema, { name: "John" })).toThrow(TypeError)
+    expect(() => s.safeParse(schema, { name: "John" })).toThrow(expectedMessage)
+    expect(() => s.parse(schema, { name: "John" })).toThrow(expectedMessage)
+    expect(() => s.is(schema, { name: "John" })).toThrow(expectedMessage)
   })
 })

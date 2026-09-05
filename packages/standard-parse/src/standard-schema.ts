@@ -13,7 +13,9 @@ export function safeParse<TSchema extends StandardSchemaV1>(
 ): StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>> {
   const result = schema["~standard"].validate(input)
   if (result instanceof Promise) {
-    throw new TypeError("Invalid type: Input is a Promise")
+    throw new TypeError(
+      "Async schemas are not supported: the schema's validate() returned a Promise"
+    )
   }
   return result
 }
