@@ -1,5 +1,12 @@
 # standard-parse
 
+## 0.6.1
+
+### Patch Changes
+
+- de7a08a: Declare `sideEffects: false` so bundlers can tree-shake unused
+  exports.
+
 ## 0.6.0
 
 ### Minor Changes
