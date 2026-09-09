@@ -9,16 +9,34 @@ interface ExpectationResult {
   expected?: unknown
 }
 
-interface StandardSchemaTestMatchers<R = unknown> {
+/*
+ * A custom matcher returns what the assertion it is called on returns: `void`
+ * on `expect(value)`, `Promise<void>` on `expect(value).resolves`, and
+ * `unknown` when used as an asymmetric matcher through `expect.toMatchSchema`.
+ * `toBeTypeOf` is a built-in matcher on every assertion object since Vitest
+ * 3.2, so its return type is that type.
+ */
+type MatcherReturn<TAssertion> = TAssertion extends {
+  toBeTypeOf: (...args: never) => infer R
+}
+  ? R
+  : unknown
+
+interface StandardSchemaTestMatchers {
   toMatchSchema<TOutput>(
     schema: StandardSchemaV1<unknown, TOutput>,
     additionalChecks?: (parsed: TOutput) => void
-  ): R
+  ): MatcherReturn<this>
 }
 
+/*
+ * Vitest 3.2 and 4 declare `Matchers<T>`. Vitest 5 declares `Matchers<R, T>`.
+ * A module augmentation must repeat the type parameters of the interface it
+ * merges with, so no single declaration can name them for both versions. A
+ * declaration with no type parameters merges with either.
+ */
 declare module "vitest" {
-  // oxlint-disable-next-line typescript/no-explicit-any -- must match vitest's built-in Matchers<T = any> signature
-  interface Matchers<T = any> extends StandardSchemaTestMatchers<T> {}
+  interface Matchers extends StandardSchemaTestMatchers {}
 }
 
 function toMatchSchema<TOutput>(

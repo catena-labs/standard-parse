@@ -14,6 +14,8 @@ npm install -D standard-matchers
 
 ## Vitest
 
+Works with Vitest 3.2 and later, including Vitest 4 and 5.
+
 Create a setup file that imports the matchers:
 
 ```ts

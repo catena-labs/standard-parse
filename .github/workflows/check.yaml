@@ -21,3 +21,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: pnpm run check
+
+  vitest-compat:
+    name: standard-matchers with vitest ${{ matrix.vitest }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        vitest: ["3.2", "4", "5"]
+    steps:
+      - uses: actions/checkout@v6
+      - run: corepack enable
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter standard-matchers add --save-dev vitest@$VITEST
+        env:
+          VITEST: ${{ matrix.vitest }}
+      - run: pnpm run build
+      - run: pnpm --filter standard-matchers run typecheck
+      - run: pnpm --filter standard-matchers run test
