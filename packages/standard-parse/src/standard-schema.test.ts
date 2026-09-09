@@ -5,6 +5,7 @@ import { z as zodV4 } from "zod"
 import { z as zodV3 } from "zod-v3"
 
 import * as s from "./standard-schema"
+import type { StandardSchemaV1 } from "./types"
 import { ValidationError } from "./validation-error"
 
 const schemaLibraries = {
@@ -78,6 +79,47 @@ describe.each(Object.entries(schemaLibraries))(
     })
   }
 )
+
+describe("result discrimination", () => {
+  it("treats falsy non-array issues as success for parse() and is()", () => {
+    const schema = {
+      "~standard": {
+        version: 1,
+        vendor: "test",
+        validate: () => ({ value: { ok: true }, issues: null })
+      }
+    } as unknown as StandardSchemaV1
+
+    expect(s.parse(schema, {})).toEqual({ ok: true })
+    expect(s.is(schema, {})).toBe(true)
+  })
+
+  it("treats a truthy issues array as failure for parse() and is()", () => {
+    const schema = {
+      "~standard": {
+        version: 1,
+        vendor: "test",
+        validate: () => ({ issues: [{ message: "bad" }] })
+      }
+    } as StandardSchemaV1
+
+    expect(() => s.parse(schema, {})).toThrow(ValidationError)
+    expect(s.is(schema, {})).toBe(false)
+  })
+
+  it("treats a truthy non-array issues value as failure (fail closed)", () => {
+    const schema = {
+      "~standard": {
+        version: 1,
+        vendor: "test",
+        validate: () => ({ issues: "error" })
+      }
+    } as unknown as StandardSchemaV1
+
+    expect(() => s.parse(schema, {})).toThrow(ValidationError)
+    expect(s.is(schema, {})).toBe(false)
+  })
+})
 
 describe("async schemas", () => {
   it("throws a TypeError identifying the schema, not the input", () => {

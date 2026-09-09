@@ -51,5 +51,6 @@ export function is<TSchema extends StandardSchemaV1>(
   input: unknown
 ): input is StandardSchemaV1.InferOutput<TSchema> {
   const result = safeParse(schema, input)
-  return result.issues === undefined
+  // Match parse(): a truthy `issues` value means failure (fail closed).
+  return !result.issues
 }
