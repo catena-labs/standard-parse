@@ -10,6 +10,20 @@ catalog:
   zod: ^4.0.0
   zod-v3: npm:zod@^3.25.76
 
+# https://pnpm.io/settings#allowbuilds
 allowBuilds:
   esbuild: true
   unrs-resolver: true
+
+# https://pnpm.io/settings#blockexoticsubdeps
+blockExoticSubdeps: true
+
+# Pin exact versions on install. No caret ranges.
+saveExact: true
+
+# https://pnpm.io/settings#trustpolicy
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
+
+# https://pnpm.io/settings#minimumreleaseage
+minimumReleaseAge: 1440
