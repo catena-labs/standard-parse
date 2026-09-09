@@ -1,6 +1,6 @@
 import { type } from "arktype"
 import * as v from "valibot"
-import { describe, expect, it } from "vitest"
+import { describe, expect, expectTypeOf, it } from "vitest"
 import { z as zodV4 } from "zod"
 import { z as zodV3 } from "zod-v3"
 
@@ -34,6 +34,39 @@ describe.each(Object.entries(schemaLibraries))(
           throw new Error("additionalChecks should not run with .not")
         })
       ).toThrow(/not to match schema/)
+    })
+
+    it("works on a resolved promise", async () => {
+      await expect(Promise.resolve({ name: "John" })).resolves.toMatchSchema(
+        schema
+      )
+    })
+
+    it("works as an asymmetric matcher", () => {
+      expect({ user: { name: "John" } }).toEqual({
+        user: expect.toMatchSchema(schema)
+      })
+    })
+
+    it("infers the parsed type from the schema", () => {
+      expect({ name: "John" }).toMatchSchema(schema, (parsed) => {
+        expectTypeOf(parsed.name).toEqualTypeOf<string>()
+      })
+    })
+
+    it("returns void on a synchronous assertion", () => {
+      expectTypeOf(
+        expect({ name: "John" }).toMatchSchema(schema)
+      ).toEqualTypeOf<void>()
+    })
+
+    it("returns a promise on a resolves assertion", async () => {
+      // oxlint-disable-next-line vitest/valid-expect -- awaited after the type assertion
+      const assertion = expect(
+        Promise.resolve({ name: "John" })
+      ).resolves.toMatchSchema(schema)
+      expectTypeOf(assertion).toEqualTypeOf<Promise<void>>()
+      await assertion
     })
   }
 )
